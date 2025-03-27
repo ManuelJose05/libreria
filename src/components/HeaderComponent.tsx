@@ -1,7 +1,8 @@
-import {MegaMenu} from "primereact/megamenu";
 import {MenuItem} from "primereact/menuitem";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import "./HeaderComponent.css"
+import {InputText} from "primereact/inputtext";
+import {Menubar} from "primereact/menubar";
 
 
 function HeaderComponent() {
@@ -24,10 +25,17 @@ function HeaderComponent() {
         }
     ]
 
+    const end = <InputText placeholder="Buscar Libro" type="text" style={{width:'20rem'}} />
+
     return (
-            <div className="card">
-                <MegaMenu model={menuItem} orientation="horizontal" breakpoint="960px" className="p-3 surface-0 shadow-2" />
-            </div>
+        <header>
+            <Menubar
+                model={menuItem}
+
+                end={end}
+                style={{ width: '100%' }}
+            />
+        </header>
     );
 }
 
