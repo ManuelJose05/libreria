@@ -1,8 +1,8 @@
 import {MenuItem} from "primereact/menuitem";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import "./HeaderComponent.css"
-import {InputText} from "primereact/inputtext";
 import {Menubar} from "primereact/menubar";
+import {AutoComplete} from "primereact/autocomplete";
 
 
 function HeaderComponent() {
@@ -22,16 +22,30 @@ function HeaderComponent() {
             command: () => {
                 return navigate("/list");
             },
+        },
+        {
+            label: "Añadir Libro",
+            icon: "pi pi-plus",
+            command: () => navigate("/libros/new"),
+        },
+        {
+            label: "Usuarios",
+            icon: "pi pi-user",
+            command: () => navigate("/usuarios/list"),
+        },
+        {
+            label: "Prestar Libro",
+            icon: "pi pi-tag",
+            command: () => navigate("/libros/new-prestamo"),
         }
     ]
 
-    const end = <InputText placeholder="Buscar Libro" type="text" style={{width:'20rem'}} />
+    const end = <AutoComplete placeholder="Buscar Libro" type="text" style={{width:'20rem'}} />
 
     return (
         <header>
             <Menubar
                 model={menuItem}
-
                 end={end}
                 style={{ width: '100%' }}
             />

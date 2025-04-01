@@ -14,7 +14,7 @@ function LibroDetail() {
     const {libroDetail,getLibroById} = useContext(LibroContext);
 
     useEffect(() => {
-        getLibroById(id);
+        getLibroById(id!);
     },[]);
 
     const chips = libroDetail?.genero?.map((genero:Genero) => {
@@ -29,12 +29,12 @@ function LibroDetail() {
                         <HeaderComponent/>
                     </div>
                     <Fieldset legend={libroDetail.name} >
-                        <Image src="https://es.web.img2.acsta.net/pictures/14/04/30/11/36/185120.jpg" width="300" height="400" alt={libroDetail.name} preview/>
+                        <Image className="shadow-3 border-round-xl" src={libroDetail.img} width="300" height="400" alt={libroDetail.name} preview/>
                         <p className="m-0 mt-5">
                             {libroDetail.descripcion}
                         </p>
                         <div className="flex flex-column-reverse mt-3">
-                            <p><b>Fecha de Publicación:</b> {libroDetail.fecha_publicacion}</p>
+                            <p><b>Fecha de Publicación:</b> {libroDetail.fecha_publicacion.toString()}</p>
                             <p><b>Editorial:</b> {libroDetail.editorial}</p>
                             <Accordion className="flex flex-wrap justify-content-center gap-2 mb-3">
                                 <AccordionTab header={libroDetail.autor.name}>
@@ -43,7 +43,7 @@ function LibroDetail() {
                                     alt={libroDetail.autor.name} preview
                                     />
                                     <p><b>Nombre: </b> {libroDetail.autor.name}</p>
-                                    <p><b>Fecha de Nacimiento: </b> {libroDetail.autor.fecha_nacimiento}</p>
+                                    <p><b>Fecha de Nacimiento: </b> {libroDetail.autor.fecha_nacimiento.toString()}</p>
                                     <p><b>Nacionalidad: </b> {libroDetail.autor.nacionalidad}</p>
                                 </AccordionTab>
                             </Accordion>

@@ -1,19 +1,20 @@
+import {Card} from "primereact/card";
 
-function CustomChipComponent(props: { title: string, value: number, iconClass: string}) {
+function CustomChipComponent(props: { title: string, value: number, iconClass: string,backgroundColor: string,iconColor: string }) {
     return (
-        <div className="col-12 md:col-6 lg:col-3">
-            <div className="surface-0 shadow-5 p-3">
-                <div className="flex justify-content-center mb-1">
-                    <div>
-                        <span className="block text-500 font-medium mb-3">{props.title}</span>
-                        <div className="text-900 font-medium text-xl">{props.value}</div>
-                    </div>
-                    <div>
-                        <i className={props.iconClass}></i>
-                    </div>
+        <Card className="flex-1">
+            <div className="flex justify-content-between gap-5">
+                <div className="flex flex-column gap-1">
+                    <span className="text-secondary text-sm">{props.title}</span>
+                    <span className="font-bold text-lg">{props.value}</span>
                 </div>
+                <span className="w-2rem h-2rem border-circle inline-flex justify-content-center align-items-center text-center"
+                style={{backgroundColor: props.backgroundColor,color: props.iconColor}}
+                >
+                    <i className={props.iconClass} />
+                </span>
             </div>
-        </div>
+        </Card>
     );
 }
 

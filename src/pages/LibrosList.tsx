@@ -1,7 +1,7 @@
 import HeaderComponent from "../components/HeaderComponent.tsx";
 import {LibroContext} from "../context/libro.context.tsx";
-import {useContext, useEffect} from "react";
-import {DataTable} from "primereact/datatable";
+import { useContext, useEffect} from "react";
+import {DataTable, DataTableRowClickEvent} from "primereact/datatable";
 import {Column} from "primereact/column";
 import {useNavigate} from "react-router-dom";
 
@@ -13,7 +13,7 @@ function LibrosList() {
         getLibros();
     },[])
 
-    const onColumnClick = (e) => {
+    const onColumnClick = (e:DataTableRowClickEvent) => {
         return navigate(`/libros/${e.data.id}`);
     }
 

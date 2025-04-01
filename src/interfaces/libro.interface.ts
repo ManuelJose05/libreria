@@ -2,7 +2,7 @@ import {Genero} from "./genero.interface.ts";
 import {Autor} from "./autor.interface.ts";
 
 export interface Libro {
-    id:                number;
+    id?:                number;
     isbn:              string;
     name:              string;
     descripcion:       string;
@@ -11,4 +11,5 @@ export interface Libro {
     genero:            Genero[];
     cantidad:          number;
     autor:             Autor;
+    img: string;
 }
