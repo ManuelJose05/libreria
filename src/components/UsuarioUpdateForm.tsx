@@ -70,15 +70,15 @@ function UsuarioUpdateForm({editMode,addUserMode}: UsuarioUpdateFormProps) {
 
     const onCpfHandle = (e:InputNumberChangeEvent) => {
         setUsuarioSelected({
-                ...usuarioSelected,
-                cp: e.value!
-            })
+            ...usuarioSelected,
+            cp: e.value!
+        })
     }
 
     const toast: RefObject<Toast | null> = useRef<Toast>(null);
 
     const accept = async () => {
-         toast.current?.show({
+        toast.current?.show({
             severity: 'warn',
             summary: "Confirmed",
             detail: "User deleted successfully",
@@ -104,9 +104,9 @@ function UsuarioUpdateForm({editMode,addUserMode}: UsuarioUpdateFormProps) {
     return (
         <>
             {usuario && (
-                <div className="w-7 justify-content-center align-items-center m-auto">
-                    <h3 className="p-card-title">{usuarioSelected.name.length > 0 ? usuarioSelected.name : "Sin Nombre"}</h3>
-                    <form onSubmit={onSubmit}>
+                <div className="w-6 justify-content-center align-items-center m-auto">
+                    <h3 className="p-card-title text-center">{usuarioSelected.name.length > 0 ? usuarioSelected.name : "Sin Nombre"}</h3>
+                    <form onSubmit={onSubmit} className="justify-content-center m-auto align-items-center">
                         <div className="p-card-body flex flex-row flex-wrap gap-5 align-items-center justify-content-center m-auto">
                             <div className="mt-3">
                                 <FloatLabel>
@@ -145,20 +145,22 @@ function UsuarioUpdateForm({editMode,addUserMode}: UsuarioUpdateFormProps) {
                                     <label htmlFor="cp">Código Postal</label>
                                 </FloatLabel>
                             </div>
-                            {editMode && (
-                                <>
-                                    <Button label="Actualizar Usuario" type="submit" icon="pi pi-user"/>
-                                    <Toast ref={toast} />
-                                    <ConfirmDialog />
-                                    <div className="card flex flex-wrap gap-2 justify-content-center">
-                                        <Button className="p-button-danger" onClick={confirm} icon="pi pi-times" label="Eliminar Usuario"></Button>
-                                    </div>
-                                </>
-                            )}
-                            {addUserMode && (
-                                <Button label="Añadir nuevo Usuario" type="submit" icon="pi pi-user" />
-                            )}
                         </div>
+                        {editMode && (
+                            <>
+                                <Toast ref={toast} />
+                                <ConfirmDialog />
+                                <div className="card flex flex-wrap gap-2 justify-content-center mt-4">
+                                    <Button label="Actualizar Usuario" type="submit" icon="pi pi-user"/>
+                                    <Button className="p-button-danger" onClick={confirm} icon="pi pi-times" label="Eliminar Usuario"></Button>
+                                </div>
+                            </>
+                        )}
+                        {addUserMode && (
+                            <div className="card flex flex-wrap gap-2 justify-content-center mt-4">
+                                <Button label="Añadir nuevo Usuario" type="submit" icon="pi pi-user" className="m-auto justify-content-center mt-4" />
+                            </div>
+                        )}
                     </form>
                 </div>
             )}

@@ -27,13 +27,13 @@ function PrestarLibro() {
 
 
     return (
-        <div className="flex flex-column gap-8 items-center justify-content-center w-full">
-            <div className="-m-5">
-                <HeaderComponent />
+        <div className="flex flex-column gap-7 items-center justify-center w-full">
+            <div className="-m-2">
+                <HeaderComponent/>
             </div>
-            <Card title="Prestar Libro" translate="yes" className="w-6 justify-content-center m-auto">
-                <div className="flex flex-column gap-3 items-center justify-content-center w-6">
-                    <p className="m-0 text-left pl-2 font-bold">Libros disponibles: </p>
+            <Card title="Prestar Libro" translate="yes" className="w-4 justify-content-center text-center align-items-center m-auto">
+                <div className="flex flex-column gap-3 items-center justify-content-center w-5 m-auto">
+                    <p className="m-0 text-center pl-2 font-bold">Libros disponibles: </p>
                     <Dropdown
                         filter
                         filterPlaceholder="Search by Book Title"
@@ -41,15 +41,15 @@ function PrestarLibro() {
                         value={prestamo.libro}
                         optionLabel="name"
                         placeholder="Selecciona un libro"
-                        className="m-0 text-left pl-2"
+                        className="w-full lg:w-full sm:w-full justify-content-center m-auto"
                         onChange={(e: DropdownChangeEvent) =>
                             setPrestamo(prev => ({ ...prev, libro: e.value }))
                         }
                     />
                 </div>
 
-                <div className="flex flex-column gap-3 items-center justify-content-center w-6 mt-5">
-                    <p className="m-0 text-left pl-2 font-bold">Usuarios: </p>
+                <div className="flex flex-column gap-3 items-center justify-content-center w-5 mt-5 m-auto">
+                    <p className="m-0 text-center pl-2 font-bold">Usuarios: </p>
                     <Dropdown
                         filter
                         filterPlaceholder="Search by Usuario Name"
@@ -57,7 +57,7 @@ function PrestarLibro() {
                         placeholder="Selecciona un usuario"
                         options={usuarios}
                         optionLabel="name"
-                        className="m-0 text-left pl-2"
+                        className="w-full lg:w-full sm:w-full justify-content-center m-auto"
                         onChange={(e: DropdownChangeEvent) =>
                             setPrestamo(prev => ({ ...prev, usuario: e.value }))
                         }

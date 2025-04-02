@@ -82,13 +82,13 @@ function UsuariosList() {
 
     return (
         <>
-            <div className="flex flex-column gap-7 items-center justify-center w-full">
-                <div className="-m-5">
+            <div className="flex flex-column gap-5 justify-content-center w-full">
+                <div className="-m-2">
                     <HeaderComponent/>
                 </div>
                 <div className="card">
-                    <h3 className="p-card-title mt-0 font-italic text-2xl">Listado de Usuarios</h3>
-                    <Button label="Nuevo Usuario" className="mb-4" onClick={onNewUsuario}/>
+                    <h3 className="p-card-title mt-0 font-italic text-2xl text-center">Listado de Usuarios</h3>
+                    <Button label="Nuevo Usuario" className="pb-10 justify-content-center m-auto" onClick={onNewUsuario}/>
                     <DataTable
                         expandedRows={exapandedRows}
                         onRowToggle={(e: DataTableRowToggleEvent) => {

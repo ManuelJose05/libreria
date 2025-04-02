@@ -20,12 +20,12 @@ function LibrosList() {
 
     return (
         <>
-            <div className="flex flex-column gap-1 items-center justify-center">
-                <div className="-m-5">
+            <div className="flex flex-column gap-3 items-center justify-center w-full">
+                <div className="-m-2">
                     <HeaderComponent/>
                 </div>
-                <div className="card w-full">
-                    <h4 className="text-3xl">Listado de Libros</h4>
+                <div className="justify-content-center items-center">
+                    <h4 className="text-3xl text-center">Listado de Libros</h4>
                     <DataTable
                         globalFilterMatchMode="contains"
                         filterDisplay="menu"

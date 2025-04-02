@@ -36,9 +36,6 @@ function Home() {
         })
     }
 
-    obtenerLibrosPrestadosPorMeses();
-
-
     const values = [
         { label: 'Libros Prestados', color: 'red', value: ((numPrestamos / totalLibros) * 100), icon: 'pi pi-book' }
     ]
@@ -63,7 +60,8 @@ function Home() {
                 'rgb(40, 180, 99)', 'rgb(231, 76, 60)', 'rgb(241, 196, 15)', 'rgb(26, 188, 156)'
             ],
             borderWidth: 1
-        }]
+        },
+        ]
     }
 
     const options = {
@@ -79,32 +77,38 @@ function Home() {
 
     const vistas = ["pie","bar","doughnut","line","polarArea"];
 
+    obtenerLibrosPrestadosPorMeses();
+
     return (
         <>
-            {librosPrestadosEnMeses}
-            <div className="flex flex-column gap-8 items-center justify-center">
-                <div className="-m-5">
-                    <HeaderComponent/>
+            <div className="flex flex-column gap-7 items-center justify-content-center w-full m-auto">
+                <div className="-m-2">
+                    <HeaderComponent />
                 </div>
-                <div className="grid justify-content-center gap-4 justify-content-center">
-                    <CustomChipComponent title="Capacidad Almacen" value={1000} iconClass="pi pi-book text-xl" iconColor="white" backgroundColor="black"/>
-                    <CustomChipComponent title="Total de Títulos" value={libros.length} iconClass="pi pi-book text-xl" iconColor="white" backgroundColor="green"/>
-                    <CustomChipComponent title="Total de Libros" value={totalLibros} iconClass="pi pi-book text-xl" iconColor="white" backgroundColor="orange"/>
-                    <CustomChipComponent title="Libros Sin Devolver" value={numPrestamos} iconClass="pi pi-refresh text-xl" iconColor="white" backgroundColor="red"/>
-                    <CustomChipComponent title="Usuarios Registrados" value={usuarios.length} iconClass="pi pi-user text-xl" iconColor="white" backgroundColor="blue"/>
+                <div className="grid justify-content-center gap-4">
+                    <CustomChipComponent title="Capacidad Almacen" value={1000} iconClass="pi pi-book text-xl" iconColor="white" backgroundColor="black" />
+                    <CustomChipComponent title="Total de Títulos" value={libros.length} iconClass="pi pi-book text-xl" iconColor="white" backgroundColor="green" />
+                    <CustomChipComponent title="Libros en Almacén" value={totalLibros} iconClass="pi pi-book text-xl" iconColor="white" backgroundColor="orange" />
+                    <CustomChipComponent title="Libros Sin Devolver" value={numPrestamos} iconClass="pi pi-refresh text-xl" iconColor="white" backgroundColor="red" />
+                    <CustomChipComponent title="Usuarios Registrados" value={usuarios.length} iconClass="pi pi-user text-xl" iconColor="white" backgroundColor="blue" />
                 </div>
                 <div className="card flex flex-row gap-4 justify-content-center m-auto">
                     <MeterGroup values={values} />
                     <MeterGroup max={1000} values={valuesStorage} />
                 </div>
-                <Dropdown optionLabel="label" options={vistas} value={vistaGrafica}
-                          placeholder="Selecciona una vista" className="w-5 justify-content-center m-auto mt-2 mb-0"
-                onChange={(e) => setVistaGrafica(e.value)}
+                <Dropdown
+                    optionLabel="label"
+                    options={vistas}
+                    value={vistaGrafica}
+                    placeholder="Selecciona una vista"
+                    className="w-5 justify-content-center m-auto mt-2 mb-0"
+                    onChange={(e) => setVistaGrafica(e.value)}
                 />
-                <div className="card justify-content-center">
-                    <Chart type={vistaGrafica} options={options} data={data} />
+                <div className="flex justify-content-center w-7 m-auto">
+                    <Chart type={vistaGrafica} options={options} data={data} className="w-10" />
                 </div>
             </div>
+
         </>
     );
 }

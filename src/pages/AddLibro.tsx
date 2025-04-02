@@ -9,9 +9,15 @@ import {Libro} from "../interfaces/libro.interface.ts";
 import {LibroContext, LibroContextType} from "../context/libro.context.tsx";
 import {MultiSelect, MultiSelectChangeEvent} from "primereact/multiselect";
 import {Button} from "primereact/button";
+import {Dropdown, DropdownChangeEvent} from "primereact/dropdown";
+import {Autor} from "../interfaces/autor.interface.ts";
+import {Dialog} from "primereact/dialog";
 
+// @ts-ignore
 function AddLibro() {
     const {autores,getAutores,generos,getGeneros,editorial,getEditorial,saveLibro} = useContext<LibroContextType>(LibroContext);
+
+    const editorialesObject = Object(editorial);
 
     const [newLibro, setNewLibro] = useState<Libro>({
         isbn: "", name: "", descripcion: "", editorial: "",img: "",
@@ -19,6 +25,15 @@ function AddLibro() {
         autor: {
             id: 1, name: "", nacionalidad: "", fecha_nacimiento: new Date()
     }})
+
+    const [newAutor, setNewAutor] = useState<Autor>({
+        id: 0, name: "", nacionalidad: "", fecha_nacimiento: new Date()
+    })
+    const [newGenero, setNewGenero] = useState<string>("")
+
+    const [modalVisible, setModalVisible] = useState({
+        visible: false, type: ""
+    })
 
     useEffect(() => {
         getAutores();
@@ -60,12 +75,11 @@ function AddLibro() {
         setNewLibro((prev) => ({...prev, genero: [...prev.genero, e.selectedOption] }));
     }
 
-    const onAutorSelect = (e:ChangeEvent<HTMLSelectElement>) => {
-        const selectedAutor = autores.find((autor) => autor.id === parseInt(e.target.value));
+    const onAutorSelect = (e:DropdownChangeEvent) => {
+        const selectedAutor:Autor = autores.find((autor) => autor.id === parseInt(e.target.value.id))!;
         if (selectedAutor) {
             setNewLibro((prev) => ({ ...prev, autor: selectedAutor }));
         }
-
     }
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -74,91 +88,118 @@ function AddLibro() {
         setNewLibro((prev) => ({...prev, fecha_publicacion: e.value}))
     }
 
-    const onEditorialHandle = (e:ChangeEvent<HTMLSelectElement>) => {
-        setNewLibro((prev) => ({ ...prev, editorial: e.target.value }));
+    const onEditorialHandle = (e:DropdownChangeEvent) => {
+        setNewLibro((prev) => ({ ...prev, editorial: e.value }));
     }
 
-    const showEditoriales = () => {
-
-        return Object.entries(editorial).map(([key,value]) => (
-            <option value={value['id']} key={key}>
-                {value['name']}
-            </option>
-        ));
+    const onImgHandle = (e:ChangeEvent<HTMLTextAreaElement>)=> {
+        setNewLibro((prev) => ({...prev,img: e.target.value }));
     }
 
+    const onAddAutor = "Se ha añadido el autor"
+
+
+
+    const modaAutorlBody = (
+        <div className="flex flex-column gap-4 align-items-center justify-content-center gap-2">
+            <span className="font-bold white-space-nowrap">Agregar un Autor</span>
+            <FloatLabel>
+                <InputText id="name" value={newAutor.name} onChange={(e:ChangeEvent<HTMLInputElement>) => setNewAutor((prev) => ({...prev,name:e.target.value }))} />
+                <label htmlFor="name">Nombre</label>
+            </FloatLabel>
+            <FloatLabel>
+                <InputText id="nationality" value={newAutor.nacionalidad} onChange={(e:ChangeEvent<HTMLInputElement>) => setNewAutor((prev) => ({...prev,nacionalidad:e.target.value }))} />
+                <label htmlFor="nationality">Nacionalidad</label>
+            </FloatLabel>
+                <div className="flex flex-column justify-content-center align-items-center w-full">
+                    <p>Fecha de nacimiento</p>
+                    <Calendar showIcon id="fecha" className="w-full md:w-30rem" dateFormat={"yy-mm-dd"} onChange={(e) => {
+                        setNewAutor((prev) => ({...prev, fecha_nacimiento: e.value!}));
+                    }} value={newLibro.fecha_publicacion} />
+                </div>
+        </div>
+    )
+
+    const modalGeneroBody = (
+        <div className="flex flex-column gap-4 align-items-center justify-content-center gap-2">
+            <span className="font-bold white-space-nowrap">Agregar un Género</span>
+            <FloatLabel>
+                <InputText id="Genero" value={newGenero} onChange={(e:ChangeEvent<HTMLInputElement>) => setNewGenero(e.target.value)} />
+                <label htmlFor="name">Genero</label>
+            </FloatLabel>
+        </div>
+    )
+
+    const modalFooter = (type:string) => {
+        return (
+            <div>
+                <Button label="Añadir" icon="pi pi-plus" onClick={() => {
+                    setModalVisible({visible: false,type:type});
+                    console.log(onAddAutor);
+                }} autoFocus />
+            </div>
+        )
+    }
 
     return (
         <>
             <div className="flex flex-column gap-7 items-center justify-center w-full">
-            <div className="-m-5">
-                <HeaderComponent/>
-            </div>
-            <form onSubmit={onSubmit} className="card bg-black-alpha-10 shadow-4 border-round-3xl flex flex-column gap-3 justify-content-center align-items-center w-5 max-w-md mx-auto">
-                <h3 className="p-card-title font-bold font-italic" >Crear Libro</h3>
-                <div className="flex justify-content-center">
-                <FloatLabel>
-                    <InputText id="ISBN" value={newLibro.isbn} onChange={onIsbnHandle} />
-                    <label htmlFor="ISBN">ISBN</label>
-                </FloatLabel>
+                <div className="-m-2">
+                    <HeaderComponent/>
                 </div>
-                <div className="flex justify-content-center">
-                    <FloatLabel>
-                        <InputText id="Título" value={newLibro.name} onChange={onTitleHandle} />
-                        <label htmlFor="Título">Título</label>
-                    </FloatLabel>
-                </div>
-                <div className="flex justify-content-center">
-                    <FloatLabel>
-                        <InputTextarea id="Descripción" maxLength={475} value={newLibro.descripcion} onChange={onDescripcionHandle}/>
-                        <label htmlFor="Descripción">Descripción</label>
-                    </FloatLabel>
-                </div>
-                <div className="flex justify-content-center mt-4">
-                    <FloatLabel>
-                        <InputNumber id="cantidad" value={newLibro.cantidad} onChange={onStockHandle} />
-                        <label htmlFor="cantidad">Cantidad</label>
-                    </FloatLabel>
-                </div>
-                <div className=" flex justify-content-center">
-                    <MultiSelect value={newLibro.genero} onChange={onGeneroHandle} options={generos} optionLabel="genero"
-                                 placeholder="Selecciona un Género"  className="w-full md:w-20rem" maxSelectedLabels={2} />
-                </div>
-                <div className="flex flex-column justify-content-center mt-4">
-                    <label htmlFor="editorial-select">Selecciona la editorial: </label>
-                    <select
-                        id="editorial-select"
-                        className="w-full md:w-14rem"
-                        onChange={onEditorialHandle}
-                        value={newLibro.editorial}>
-                        <option value="">Seleccione una editorial</option>
-                        {showEditoriales()}
-                    </select>
-                </div>
-                <div className="flex flex-column justify-content-center mt-4">
-                    <label htmlFor="autor-select">Selecciona un autor: </label>
-                    <select
-                        id="autor-select"
-                        className="w-full md:w-14rem"
-                        onChange={onAutorSelect}
-                        value={newLibro.autor.id}>
-                        <option value="">Seleccione un autor</option>
-                        {autores &&
-                            autores.map((autor) => (
-                                <option key={autor.id} value={autor.id}>
-                                    {autor.name}
-                                </option>
-                            ))}
-                    </select>
-                </div>
-                <div className="flex justify-content-center">
-                    <div className="flex flex-column justify-content-center align-items-center w-full">
-                        <p>Fecha de publicación: </p>
-                        <Calendar showIcon id="fecha" className="w-full md:w-30rem" dateFormat={"yy-mm-dd"} onChange={onFechaHandle} value={newLibro.fecha_publicacion} />
+                <form onSubmit={onSubmit} className="card bg-black-alpha-10 shadow-4 border-round-3xl flex flex-column gap-4 justify-content-center align-items-center w-5 max-w-md mx-auto">
+                    <h3 className="p-card-title font-bold font-italic">Crear Libro</h3>
+
+                    <div className="grid md:col-4 lg:col-2 gap-4 justify-content-center m-3 w-full">
+                        <FloatLabel>
+                            <InputText id="ISBN" value={newLibro.isbn} onChange={onIsbnHandle} />
+                            <label htmlFor="ISBN">ISBN</label>
+                        </FloatLabel>
+
+                        <FloatLabel>
+                            <InputText id="Título" value={newLibro.name} onChange={onTitleHandle} />
+                            <label htmlFor="Título">Título</label>
+                        </FloatLabel>
+
+                        <FloatLabel >
+                            <InputNumber id="cantidad" value={newLibro.cantidad} onChange={onStockHandle} />
+                            <label htmlFor="cantidad">Cantidad</label>
+                        </FloatLabel>
+
+                        <FloatLabel>
+                            <InputTextarea id="Descripción" maxLength={475} value={newLibro.descripcion} onChange={onDescripcionHandle}/>
+                            <label htmlFor="Descripción">Descripción</label>
+                        </FloatLabel>
+
+                        <FloatLabel>
+                            <InputTextarea id="img" value={newLibro.img} onChange={onImgHandle} />
+                            <label htmlFor="img">URL Imagen</label>
+                        </FloatLabel>
+
+                        <MultiSelect value={newLibro.genero} onChange={onGeneroHandle} options={generos} optionLabel="genero"
+                                     placeholder="Selecciona un Género" className="w-full md:w-20rem" maxSelectedLabels={2} />
+
+                        <Dropdown id="editorial-select" options={Array.isArray(editorialesObject) ? editorialesObject : [] } optionLabel="name" value={newLibro.editorial} placeholder="Editorial"
+                                  onChange={onEditorialHandle} className="w-full md:w-14rem" filter filterBy="name" filterPlaceholder="Buscar por Nombre" filterMatchMode="contains" emptyFilterMessage="No se ha encontrado ninguna Editorial" />
+
+                        <Dropdown id="autor-select" options={autores} optionLabel="name" value={newLibro.autor} placeholder="Autor"
+                                  onChange={onAutorSelect} className="w-full md:w-14rem" filter filterBy="name" filterPlaceholder="Buscar por Nombre" filterMatchMode="contains" emptyFilterMessage="No se ha encontrado ningún Autor" />
+
+                        <div className="flex flex-column justify-content-center align-items-center w-full">
+                            <p>Fecha de publicación:</p>
+                            <Calendar showIcon id="fecha" className="w-full md:w-30rem" dateFormat="yy-mm-dd" onChange={onFechaHandle} value={newLibro.fecha_publicacion} />
+                        </div>
                     </div>
+
+                    <Button label="Guardar Libro" className="mb-4" type="submit"/>
+                </form>
+
+                <div className="flex flex-row gap-3 m-auto justify-content-center w-full">
+                    <Button className="w-1 justify-content-center" label="Añadir Autor" icon="pi pi-external-link" onClick={() => setModalVisible({visible: true, type:"AUTOR"})} />
+                    <Button className="w-1 justify-content-center" label="Añadir Género" icon="pi pi-external-link" onClick={() => setModalVisible({visible: true, type:"GENERO"})} />
                 </div>
-                <Button label="Guardar Libro"/>
-            </form>
+
+                <Dialog header={modalVisible.type === "GENERO" ? modalGeneroBody : modaAutorlBody} footer={() => modalFooter(modalVisible.type)} visible={modalVisible.visible} onHide={() => setModalVisible({visible: false, type:"GENERO"})} />
             </div>
         </>
     );
